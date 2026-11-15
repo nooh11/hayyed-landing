@@ -130,14 +130,73 @@ p{margin:0}
 .nav{display:none;gap:28px;font-size:16px}
 .nav a{text-decoration:none;color:var(--paper-mute);transition:color .2s}
 .nav a:hover{color:var(--paper)}
-.top .btn{min-height:40px;padding:0 16px;font-size:14px}
-@media (min-width:900px){.top .wrap{height:72px}.brand img{height:40px}.nav{display:flex}.top .btn{min-height:44px;padding:0 18px;font-size:15px}}
+.top .btn{display:none}
+@media (min-width:900px){.top .wrap{height:72px}.brand img{height:40px}.nav{display:flex}.top .btn{display:inline-flex;min-height:44px;padding:0 18px;font-size:15px}}
+
+/* request form (dialog) */
+dialog.req{padding:0;border:0;background:transparent;color:var(--ink);width:100%;max-width:520px;max-height:100dvh;margin:auto auto 0;overflow:visible}
+@media (min-width:600px){dialog.req{margin:auto;max-height:92dvh}}
+dialog.req::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+dialog.req[open]{animation:sheet .45s var(--ease)}
+@keyframes sheet{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.sheet{background:var(--paper);border-radius:20px 20px 0 0;max-height:94dvh;overflow:auto;overscroll-behavior:contain}
+@media (min-width:600px){.sheet{border-radius:20px;max-height:92dvh}}
+.sheet-head{position:sticky;top:0;z-index:2;background:var(--paper);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px 12px;border-bottom:1px solid var(--ink-faint)}
+.sheet-head h2{font-size:20px}
+.sheet-head p{font-size:13px;color:var(--ink-mute);line-height:1.5}
+.x{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--ink-faint);background:#fff;display:grid;place-items:center;cursor:pointer}
+.x svg{width:16px;height:16px}
+.grab{width:40px;height:4px;border-radius:4px;background:var(--ink-faint);margin:8px auto 0}
+@media (min-width:600px){.grab{display:none}}
+.req form{padding:18px 20px 22px;display:grid;gap:16px}
+.fld{display:grid;gap:6px}
+.fld>label,.fld legend{font-size:14px;font-weight:700}
+.fld .opt{font-weight:400;color:var(--ink-mute)}
+.fld input[type=text],.fld input[type=tel]{width:100%;height:50px;border:1.5px solid rgba(17,17,17,.18);border-radius:12px;background:#fff;padding:0 14px;font:400 16px "Thmanyah Sans",sans-serif;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+.fld input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(238,98,0,.2)}
+.fld input[type=tel]{direction:ltr;text-align:right}
+.fld .err{display:none;font-size:13px;color:#b42318}
+.fld.bad input{border-color:#d92d20}
+.fld.bad .err{display:block}
+fieldset.fld{border:0;margin:0;padding:0;min-width:0}
+.logo-drop{display:flex;align-items:center;gap:12px;border:1.5px dashed rgba(17,17,17,.25);border-radius:12px;background:#fff;padding:12px 14px;cursor:pointer;position:relative}
+.logo-drop:focus-within{border-color:var(--orange);box-shadow:0 0 0 3px rgba(238,98,0,.2)}
+.logo-drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.logo-prev{flex:none;width:48px;height:48px;border-radius:10px;background:var(--paper);display:grid;place-items:center;overflow:hidden}
+.logo-prev img{width:100%;height:100%;object-fit:contain}
+.logo-prev svg{width:22px;height:22px;opacity:.5}
+.logo-drop b{display:block;font-size:14px}
+.logo-drop small{font-size:12px;color:var(--ink-mute)}
+.pal{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (min-width:460px){.pal{grid-template-columns:1fr 1fr 1fr}}
+.pal label{position:relative;display:grid;gap:8px;background:#fff;border:1.5px solid rgba(17,17,17,.14);border-radius:12px;padding:10px;cursor:pointer;font-size:13px;font-weight:500;line-height:1.35;transition:border-color .2s,transform .2s var(--ease)}
+.pal label:active{transform:scale(.97)}
+.pal input{position:absolute;opacity:0;pointer-events:none}
+.pal .sw{display:flex;height:30px;border-radius:7px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.pal .sw i{flex:1}
+.pal .sw i:first-child{flex:2}
+.pal label:has(input:checked){border-color:var(--orange);box-shadow:0 0 0 3px rgba(238,98,0,.18)}
+.pal label:has(input:focus-visible){outline:3px solid var(--orange);outline-offset:2px}
+.pal label:has(input:checked)::after{content:"";position:absolute;top:-7px;inset-inline-start:-7px;width:20px;height:20px;border-radius:50%;background:var(--orange) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23111' d='m9.5 16.2-4-4L4 13.7l5.5 5.5L20 8.7l-1.5-1.4Z'/%3E%3C/svg%3E") center/14px no-repeat}
+.pal .any .sw{background:repeating-linear-gradient(45deg,#eee 0 6px,#fff 6px 12px)}
+.req .send{width:100%;margin-top:4px}
+.req .note{font-size:12px;color:var(--ink-mute);text-align:center}
+.done{display:none;padding:28px 20px 30px;text-align:center}
+.done .ok{width:64px;height:64px;border-radius:50%;background:#e7f7ec;display:grid;place-items:center;margin:0 auto 14px}
+.done .ok svg{width:30px;height:30px;fill:#188038}
+.done h3{font-size:22px}
+.done p{margin-top:8px;color:var(--ink-mute);font-size:15px}
+.done .btn{margin-top:18px}
+.req.sent form{display:none}
+.req.sent .done{display:block}
 
 /* hero */
 .hero{position:relative;padding:36px 0 40px;overflow:hidden}
 .hero-grid{display:grid;gap:40px;align-items:center}
 @media (min-width:1000px){.hero{padding:88px 0 96px}.hero-grid{grid-template-columns:1.05fr 1fr;gap:56px}}
-.hero h1{font-size:clamp(34px,9.4vw,80px)}
+.hero h1{font-size:clamp(34px,9.4vw,80px);line-height:1.38}
+.hero h1 .ln{display:block}
+.sec h2,.final h2{line-height:1.3}
 .hero h1 em{font-style:normal;color:var(--orange);position:relative;white-space:nowrap}
 .hero h1 em::after{content:"";position:absolute;inset-inline:0;bottom:.02em;height:.09em;background:var(--orange);border-radius:4px;transform-origin:right;transform:scaleX(0);animation:line 1s .9s var(--ease) forwards}
 @keyframes line{to{transform:scaleX(1)}}
@@ -392,7 +451,7 @@ section{scroll-margin-top:72px}
   <img class="hero-mark spin" src="img/symbol.svg" alt="" width="420" height="420" aria-hidden="true">
   <div class="wrap hero-grid">
     <div>
-      <h1 id="h1" class="ld">مكتبك له سمعة. <em>خلّها تظهر</em> لمن يبحث عنك.</h1>
+      <h1 id="h1" class="ld"><span class="ln">مكتبك له سمعة.</span> <span class="ln"><em>خلّها تظهر</em> لمن يبحث عنك.</span></h1>
       <p class="lead ld" style="--d:.12s"><strong>هيِّد استوديو سعودي يصمّم مواقع مكاتب المحاماة</strong>، ويجهّزها لتظهر في بحث جوجل (SEO) وفي إجابات أدوات الذكاء الاصطناعي مثل ChatGPT وGemini (GEO).</p>
       <div class="ctas ld" style="--d:.24s">
         <a class="btn btn-primary pulse" href="https://wa.me/966591734948?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%A8%D8%BA%D9%89%20%D8%AA%D8%B5%D9%88%D9%91%D8%B1%20%D9%85%D8%AC%D8%A7%D9%86%D9%8A%20%D9%84%D9%85%D9%88%D9%82%D8%B9%20%D9%85%D9%83%D8%AA%D8%A8%D9%8A" target="_blank" rel="noopener">
@@ -623,9 +682,116 @@ section{scroll-margin-top:72px}
   <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3a.5.5 0 0 0 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3Z"/></svg>
 </a>
 
+<dialog class="req" id="req" aria-labelledby="req-title">
+  <div class="sheet">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <div>
+        <h2 id="req-title">اطلب تصوّرك المجاني</h2>
+        <p>بدون رسوم. نجهّزه ونرسله لك على الواتساب.</p>
+      </div>
+      <button type="button" class="x" id="req-close" aria-label="إغلاق"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4-6.3-6.3-6.3 6.3-1.4-1.4L9.2 12 2.9 5.7l1.4-1.4 6.3 6.3 6.3-6.3Z"/></svg></button>
+    </div>
+
+    <form id="req-form" novalidate>
+      <div class="fld">
+        <label for="f-name">الاسم</label>
+        <input id="f-name" name="name" type="text" autocomplete="name" required>
+        <span class="err">اكتب اسمك.</span>
+      </div>
+      <div class="fld">
+        <label for="f-phone">رقم الجوال</label>
+        <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="05xxxxxxxx" required>
+        <span class="err">اكتب رقم جوال صحيح، مثل 0512345678.</span>
+      </div>
+      <div class="fld">
+        <label for="f-office">اسم المكتب أو الشركة</label>
+        <input id="f-office" name="office" type="text" autocomplete="organization" required>
+        <span class="err">اكتب اسم المكتب.</span>
+      </div>
+      <div class="fld">
+        <span id="logo-lbl" style="font-size:14px;font-weight:700">الشعار <span class="opt">(اختياري)</span></span>
+        <label class="logo-drop">
+          <span class="logo-prev" id="logo-prev"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 5v14H5V5h14m0-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Zm-4.9 8.9-3 3.8L9 13.1 6 17h12Z"/></svg></span>
+          <span><b id="logo-name">اختر صورة الشعار</b><small>PNG أو JPG أو SVG. ترفقه في محادثة الواتساب.</small></span>
+          <input id="f-logo" name="logo" type="file" accept="image/*" aria-labelledby="logo-lbl">
+        </label>
+      </div>
+      <fieldset class="fld">
+        <legend>الألوان اللي تميل لها <span class="opt">(اختياري)</span></legend>
+        <div class="pal">
+          <label><input type="radio" name="colors" value="كحلي وذهبي"><span class="sw" aria-hidden="true"><i style="background:#1B2A41"></i><i style="background:#C9A24B"></i></span>كحلي وذهبي</label>
+          <label><input type="radio" name="colors" value="أسود وذهبي"><span class="sw" aria-hidden="true"><i style="background:#141414"></i><i style="background:#B8964E"></i></span>أسود وذهبي</label>
+          <label><input type="radio" name="colors" value="أخضر داكن وذهبي"><span class="sw" aria-hidden="true"><i style="background:#1F3B2D"></i><i style="background:#C2A35A"></i></span>أخضر داكن وذهبي</label>
+          <label><input type="radio" name="colors" value="عنابي وبيج"><span class="sw" aria-hidden="true"><i style="background:#5E1A24"></i><i style="background:#D8C3A5"></i></span>عنابي وبيج</label>
+          <label><input type="radio" name="colors" value="أزرق ملكي وأبيض"><span class="sw" aria-hidden="true"><i style="background:#173B6C"></i><i style="background:#E9EEF5"></i></span>أزرق ملكي وأبيض</label>
+          <label><input type="radio" name="colors" value="رمادي فحمي وفضي"><span class="sw" aria-hidden="true"><i style="background:#2F3437"></i><i style="background:#A7ADB2"></i></span>رمادي فحمي وفضي</label>
+          <label><input type="radio" name="colors" value="بني وكريمي"><span class="sw" aria-hidden="true"><i style="background:#4A3426"></i><i style="background:#E8DCC8"></i></span>بني وكريمي</label>
+          <label><input type="radio" name="colors" value="ألوان شعار المكتب"><span class="sw" aria-hidden="true" style="background:conic-gradient(#C9A24B,#1B2A41,#5E1A24,#1F3B2D,#C9A24B)"></span>ألوان شعاري</label>
+          <label class="any"><input type="radio" name="colors" value="أترك الاختيار لكم"><span class="sw" aria-hidden="true"></span>اختاروا لي</label>
+        </div>
+      </fieldset>
+      <button type="submit" class="btn btn-primary send">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3a.5.5 0 0 0 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3Z"/></svg>
+        أرسل الطلب على الواتساب
+      </button>
+      <p class="note">تنفتح محادثة الواتساب وفيها بياناتك جاهزة، وتضغط إرسال.</p>
+    </form>
+
+    <div class="done" role="status">
+      <div class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 16.2-4-4L4 13.7l5.5 5.5L20 8.7l-1.5-1.4Z"/></svg></div>
+      <h3>جهّزنا رسالتك</h3>
+      <p id="done-msg">اضغط إرسال في الواتساب، ونرجع لك بالتصوّر.</p>
+      <a class="btn btn-ink" id="wa-again" href="#" target="_blank" rel="noopener">افتح الواتساب مرة ثانية</a>
+    </div>
+  </div>
+</dialog>
+
 <script>
 (function(){
   var d=document.documentElement; d.classList.add('js');
+
+  /* request form */
+  var dlg=document.getElementById('req'), form=document.getElementById('req-form');
+  if(dlg && typeof dlg.showModal==='function'){
+    document.querySelectorAll('a[href^="https://wa.me/"]').forEach(function(a){
+      if(a.id==='wa-again') return;
+      a.addEventListener('click',function(e){e.preventDefault();dlg.classList.remove('sent');dlg.showModal();});
+    });
+    document.getElementById('req-close').addEventListener('click',function(){dlg.close()});
+    dlg.addEventListener('click',function(e){if(e.target===dlg)dlg.close()});
+    var logo=document.getElementById('f-logo'), prev=document.getElementById('logo-prev'), lname=document.getElementById('logo-name');
+    logo.addEventListener('change',function(){
+      var f=logo.files&&logo.files[0]; if(!f) return;
+      lname.textContent=f.name;
+      var img=new Image(); img.alt='معاينة الشعار'; img.src=URL.createObjectURL(f);
+      prev.innerHTML=''; prev.appendChild(img);
+    });
+    function normPhone(v){
+      var n=(v||'').replace(/[٠-٩]/g,function(c){return '٠١٢٣٤٥٦٧٨٩'.indexOf(c)}).replace(/\D/g,'');
+      if(n.indexOf('00966')===0) n=n.slice(5); else if(n.indexOf('966')===0) n=n.slice(3);
+      if(n.charAt(0)==='0') n=n.slice(1);
+      return /^5\d{8}$/.test(n)?'0'+n:null;
+    }
+    function check(id,ok){var f=document.getElementById(id).closest('.fld');f.classList.toggle('bad',!ok);return ok}
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      var g=function(id){return document.getElementById(id).value.trim()};
+      var name=g('f-name'), office=g('f-office'), phone=normPhone(g('f-phone'));
+      var ok=[check('f-name',!!name),check('f-phone',!!phone),check('f-office',!!office)];
+      if(ok.indexOf(false)>-1){form.querySelector('.bad input').focus();return}
+      var col=(form.querySelector('input[name=colors]:checked')||{}).value||'ما حددت';
+      var hasLogo=logo.files&&logo.files.length>0;
+      var msg='السلام عليكم، أبغى تصوّر مجاني لموقع مكتبي.\n\n'+
+        'الاسم: '+name+'\nالجوال: '+phone+'\nاسم المكتب: '+office+'\nالألوان: '+col+'\nالشعار: '+(hasLogo?'متوفر، برسله لكم هنا':'غير متوفر');
+      var url='https://wa.me/966591734948?text='+encodeURIComponent(msg);
+      document.getElementById('wa-again').href=url;
+      document.getElementById('done-msg').textContent=hasLogo?'اضغط إرسال في الواتساب، وبعدها أرفق صورة الشعار في نفس المحادثة.':'اضغط إرسال في الواتساب، ونرجع لك بالتصوّر.';
+      dlg.classList.add('sent');
+      window.open(url,'_blank','noopener');
+    });
+    form.querySelectorAll('input[required]').forEach(function(i){i.addEventListener('input',function(){i.closest('.fld').classList.remove('bad')})});
+  }
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var top=document.getElementById('top'), fab=document.getElementById('fab'), hero=document.querySelector('.hero'), ai=document.getElementById('ai');
   setTimeout(function(){ai.classList.add('typed')}, reduce?0:1900);

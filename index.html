@@ -377,6 +377,7 @@ section{scroll-margin-top:72px}
 @media (min-width:700px){.inc-list{grid-template-columns:1fr 1fr;gap:10px}}
 .inc-list li{background:var(--ink-2);border:1px solid var(--paper-faint);border-radius:10px;padding:12px 14px;padding-inline-start:42px}
 .inc-list li::before{top:16px;inset-inline-start:14px}
+.not-list li::before{clip-path:none;width:14px;height:3px;top:23px;border-radius:2px;background:rgba(247,244,239,.6)}
 
 /* faq */
 .faq-list{margin-top:28px;display:grid;gap:8px}
@@ -686,6 +687,23 @@ section{scroll-margin-top:72px}
     </ul>
   </div>
 </section>
+<section class="sec" aria-labelledby="h-not">
+  <div class="wrap inc-grid">
+    <div>
+      <p class="kicker">وش ما نسوي</p>
+      <h2 id="h-not" class="rv">نقول لك من البداية وش خارج شغلنا.</h2>
+      <p class="intro muted rv">عشان تعرف بالضبط وش تتوقع منا، وما تجيك مفاجآت بعدين.</p>
+    </div>
+    <ul class="checks inc-list not-list rv">
+      <li>ما نضمن ترتيباً معيناً في جوجل ولا ذكر مكتبك في إجابات الذكاء الاصطناعي. نرفع الفرصة ولا نعد بنتيجة</li>
+      <li>ما نخترع تقييمات أو شهادات عملاء أو أرقاماً. كل ما يُنشر حقيقي</li>
+      <li>ما نصوّر المكتب أو الفريق</li>
+      <li>ما نترجم الموقع إلى لغات ثانية ضمن الموقع الأساسي، ونرتبه بعرض خاص</li>
+      <li>ما ندير الإعلانات المدفوعة في جوجل أو سناب أو غيرها</li>
+    </ul>
+  </div>
+</section>
+
 
 <!-- FAQ -->
 <section class="sec light" id="faq" aria-labelledby="h-faq">

@@ -18,4 +18,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://nooh11.github.io/hayyed-landing/sitemap.xml
+Sitemap: https://hayyed.com/sitemap.xml

@@ -184,6 +184,12 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
 .pal label{position:relative;display:grid;gap:8px;background:#fff;border:1.5px solid rgba(17,17,17,.14);border-radius:12px;padding:10px;cursor:pointer;font-size:13px;font-weight:500;line-height:1.35;transition:border-color .2s,transform .2s var(--ease)}
 .pal label:active{transform:scale(.97)}
 .pal input{position:absolute;opacity:0;pointer-events:none}
+.ar-opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.ar-opts label{position:relative;cursor:pointer}
+.ar-opts input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}
+.ar-opts span{display:inline-flex;align-items:center;min-height:44px;border:1.5px solid rgba(17,17,17,.2);border-radius:999px;padding:6px 16px;font-size:14px;background:#fff;transition:background .15s,color .15s,border-color .15s}
+.ar-opts input:checked+span{background:#111;color:#F7F4EF;border-color:#111}
+.ar-opts input:focus-visible+span{box-shadow:0 0 0 3px rgba(238,98,0,.35)}
 .pal .sw{display:flex;height:30px;border-radius:7px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
 .pal .sw i{flex:1}
 .pal .sw i:first-child{flex:2}
@@ -759,14 +765,24 @@ section{scroll-margin-top:72px}
         <input id="f-office" name="office" type="text" autocomplete="organization" required>
         <span class="err">اكتب اسم المكتب.</span>
       </div>
+      <fieldset class="fld">
+        <legend>تخصصات المكتب <span class="opt">(اختياري، نعرض في التصور اللي تختاره فقط)</span></legend>
+        <div class="ar-opts">
+          <label><input type="checkbox" name="areas" value="labour"><span>قضايا عمالية</span></label>
+          <label><input type="checkbox" name="areas" value="commercial"><span>تجارية وعقود</span></label>
+          <label><input type="checkbox" name="areas" value="family"><span>أحوال شخصية</span></label>
+          <label><input type="checkbox" name="areas" value="property"><span>عقارية</span></label>
+          <label><input type="checkbox" name="areas" value="enforce"><span>تنفيذ وتحصيل</span></label>
+        </div>
+      </fieldset>
       <div class="fld">
         <span id="logo-lbl" style="font-size:14px;font-weight:700">الشعار <span class="opt">(اختياري)</span></span>
         <label class="logo-drop">
           <span class="logo-prev" id="logo-prev"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 5v14H5V5h14m0-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Zm-4.9 8.9-3 3.8L9 13.1 6 17h12Z"/></svg></span>
-          <span><b id="logo-name">اختر صورة الشعار</b><small>PNG أو JPG أو SVG، حتى 5 ميقا.</small></span>
+          <span><b id="logo-name">اختر صورة الشعار</b><small>PNG أو JPG أو SVG بأي حجم، نصغّره لك تلقائياً.</small></span>
           <input id="f-logo" name="logo" type="file" accept="image/*" aria-labelledby="logo-lbl">
         </label>
-        <span class="err" id="logo-err" style="display:none">حجم الصورة أكبر من 5 ميقا، اختر صورة أصغر.</span>
+        <span class="err" id="logo-err" style="display:none">ما قدرنا نقرأ هالصورة. جرّب PNG أو JPG، أو كمّل بدون شعار وأرسله لنا على الواتساب.</span>
       </div>
       <fieldset class="fld">
         <legend>الألوان اللي تميل لها <span class="opt">(اختياري)</span></legend>
@@ -798,6 +814,7 @@ section{scroll-margin-top:72px}
   </div>
 </dialog>
 
+<script src="palette-from-logo.js"></script>
 <script>
 (function(){
   var d=document.documentElement; d.classList.add('js');
@@ -837,12 +854,45 @@ section{scroll-margin-top:72px}
     document.getElementById('req-close').addEventListener('click',function(){dlg.close()});
     dlg.addEventListener('click',function(e){if(e.target===dlg)dlg.close()});
     var logo=document.getElementById('f-logo'), prev=document.getElementById('logo-prev'), lname=document.getElementById('logo-name');
+    var LG={blob:null,pal:null,busy:null,failed:false};
+    /* نصغّر الشعار في المتصفح لين يصير أقل من 40 ك.ب (PNG بشفافيته أولاً، ثم JPG) عشان يظهر كامل في التصور */
+    function shrinkLogo(f){
+      return new Promise(function(resolve){
+        var url=URL.createObjectURL(f), img=new Image();
+        img.onload=function(){
+          try{
+            var w0=img.naturalWidth||img.width||300, h0=img.naturalHeight||img.height||300;
+            var plan=[[360,'image/png'],[280,'image/png'],[210,'image/png'],[150,'image/png'],[280,'image/jpeg'],[200,'image/jpeg'],[140,'image/jpeg']];
+            var k=0;
+            (function next(){
+              if(k>=plan.length){URL.revokeObjectURL(url);resolve(null);return}
+              var s=plan[k][0], t=plan[k][1]; k++;
+              var sc=Math.min(1,s/Math.max(w0,h0)), cw=Math.max(8,Math.round(w0*sc)), ch=Math.max(8,Math.round(h0*sc));
+              var cv=document.createElement('canvas'); cv.width=cw; cv.height=ch;
+              var cx=cv.getContext('2d');
+              if(t==='image/jpeg'){cx.fillStyle='#fff';cx.fillRect(0,0,cw,ch)}
+              cx.drawImage(img,0,0,cw,ch);
+              cv.toBlob(function(b){
+                if(b&&b.size<=40000){URL.revokeObjectURL(url);resolve(b)}else next();
+              },t,0.88);
+            })();
+          }catch(e){URL.revokeObjectURL(url);resolve(null)}
+        };
+        img.onerror=function(){URL.revokeObjectURL(url);resolve(null)};
+        img.src=url;
+      });
+    }
     logo.addEventListener('change',function(){
-      var f=logo.files&&logo.files[0]; if(!f) return;
+      var f=logo.files&&logo.files[0]; LG.blob=null;LG.pal=null;LG.failed=false;LG.busy=null; if(!f) return;
       document.getElementById('logo-err').style.display='none';
       lname.textContent=f.name;
       var img=new Image(); img.alt='معاينة الشعار'; img.src=URL.createObjectURL(f);
       prev.innerHTML=''; prev.appendChild(img);
+      var pPal=(window.hayyedPalette?window.hayyedPalette.paletteFromFile(f):Promise.resolve(null)).catch(function(){return null});
+      LG.busy=Promise.all([shrinkLogo(f),pPal]).then(function(r){
+        LG.blob=r[0]; LG.pal=r[1]; LG.failed=!r[0];
+        if(LG.failed) document.getElementById('logo-err').style.display='block';
+      }).catch(function(){LG.failed=true}).then(function(){LG.busy=null});
     });
     function normPhone(v){
       var n=(v||'').replace(/[٠-٩]/g,function(c){return '٠١٢٣٤٥٦٧٨٩'.indexOf(c)}).replace(/\D/g,'');
@@ -857,26 +907,28 @@ section{scroll-margin-top:72px}
       var name=g('f-name'), office=g('f-office'), phone=normPhone(g('f-phone'));
       var ok=[check('f-name',!!name),check('f-phone',!!phone),check('f-office',!!office)];
       if(ok.indexOf(false)>-1){form.querySelector('.bad input').focus();return}
+      if(LG.busy){var bt=document.getElementById('send-txt');bt.textContent='نجهّز الشعار…';LG.busy.then(function(){form.requestSubmit?form.requestSubmit():form.dispatchEvent(new Event('submit',{cancelable:true}))});return}
       var col=(form.querySelector('input[name=colors]:checked')||{}).value||'';
-      var file=logo.files&&logo.files[0];
-      if(file&&file.size>5*1024*1024){document.getElementById('logo-err').style.display='block';return}
+      var file=LG.blob||null;
+      var areas=Array.prototype.map.call(form.querySelectorAll('input[name=areas]:checked'),function(i){return i.value}).join(',');
       var msg='السلام عليكم، أنا '+name+' من '+office+'. أرسلت طلب تصوّر من صفحة هيِّد.';
       var wa='https://wa.me/966591734948?text='+encodeURIComponent(msg);
       document.getElementById('wa-again').href=wa;
       var btn=document.getElementById('send-btn'), txt=document.getElementById('send-txt');
       btn.disabled=true; txt.textContent='جاري الإرسال…';
       var fd=new FormData();
-      fd.append('name',name);fd.append('phone',phone);fd.append('office',office);fd.append('colors',col);
+      fd.append('name',name);fd.append('phone',phone);fd.append('office',office);fd.append('colors',col);fd.append('areas',areas);
       fd.append('website',document.getElementById('f-hp').value);
-      if(file) fd.append('logo',file,file.name);
+      if(file) fd.append('logo',file,'logo.'+(file.type==='image/jpeg'?'jpg':'png'));
+      if(LG.pal&&window.hayyedPalette&&window.hayyedPalette.validate(LG.pal)) fd.append('palette',JSON.stringify(window.hayyedPalette.validate(LG.pal)));
       fetch(ENDPOINT,{method:'POST',body:fd}).then(function(r){return r.ok?r.json():Promise.reject(r.status)}).then(function(j){
         if(!j||!j.ok) throw 0;
         document.getElementById('done-title').textContent='وصلنا طلبك';
         document.getElementById('done-msg').textContent='نجهّز تصوّر موقع مكتبك، ونرسله لك على الواتساب في رقمك.';
         document.getElementById('wa-again').textContent='تبي تكلمنا الحين؟ واتساب';
-        dlg.classList.add('sent'); form.reset(); resetLogo();
+        dlg.classList.add('sent'); form.reset(); resetLogo(); LG.blob=null;LG.pal=null;
       }).catch(function(){
-        var full='السلام عليكم، أبغى تصوّر مجاني لموقع مكتبي.\n\nالاسم: '+name+'\nالجوال: '+phone+'\nاسم المكتب: '+office+(col?'\nالألوان: '+col:'')+(file?'\nالشعار: برسله لكم هنا':'');
+        var full='السلام عليكم، أبغى تصوّر مجاني لموقع مكتبي.\n\nالاسم: '+name+'\nالجوال: '+phone+'\nاسم المكتب: '+office+(col?'\nالألوان: '+col:'')+((logo.files&&logo.files[0])?'\nالشعار: برسله لكم هنا':'');
         document.getElementById('wa-again').href='https://wa.me/966591734948?text='+encodeURIComponent(full);
         document.getElementById('done-title').textContent='ما قدرنا نرسل الطلب';
         document.getElementById('done-msg').textContent='صار خلل في الاتصال. أرسل بياناتك على الواتساب مباشرة'+(file?' وأرفق الشعار فيها.':'.');

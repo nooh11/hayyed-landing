@@ -908,5 +908,11 @@ section{scroll-margin-top:72px}
   } else { els.forEach(function(el){el.classList.add('in')}); }
 })();
 </script>
+<script>
+/* عدّاد زيارات مجهول: بدون كوكيز ولا بيانات شخصية. يرسل: زائر جديد؟، مصدر الزيارة، جوال؟ */
+(function(){try{var n=0;try{if(!localStorage.getItem("hy_v")){localStorage.setItem("hy_v","1");n=1}}catch(e){}
+var r="";try{r=document.referrer?new URL(document.referrer).hostname:""}catch(e){}
+fetch("https://n8n.158-101-230-99.sslip.io/webhook/hayyed-hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({n:n,r:r,m:/Mobi|Android|iPhone/i.test(navigator.userAgent)?1:0}),keepalive:true}).catch(function(){})}catch(e){}})();
+</script>
 </body>
 </html>
